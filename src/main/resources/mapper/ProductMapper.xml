@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcomputerstudy.example.mapper.ProductMapper">
+
+	<insert id="createProduct" parameterType="Product">
+		INSERT INTO product (
+							code,
+							category,
+							name,
+							descr,
+							type,
+							isSale,
+							detail_desc,
+							material,
+							size,
+							manufacturer,
+							caution,
+							price,
+							point_t,
+							stock,
+							ship,
+							mainCategory
+
+			) VALUES (
+							#{code},
+							#{category},
+							#{name},
+							#{descr},
+							#{type_s},
+							#{isSale},
+							#{detail_desc},
+							#{material},
+							#{size},
+							#{manufacturer},
+							#{caution},
+							#{price},
+							#{point},
+							#{stock},
+							#{shipping},
+							#{mainCategory}
+
+			)
+	</insert>
+	
+	<update id="insertfilesname" parameterType="map" >
+	
+		UPDATE product SET files = #{filesname} WHERE CODE = #{code}
+		
+	</update>
+	
+	<update id="insertMainPhoto" parameterType="map" >
+	
+		UPDATE product SET mainPhoto = #{mainPhoto} WHERE CODE = #{code}
+		
+	</update>
+	
+	<insert id="insertOptions" parameterType="map">
+		INSERT INTO p_options (
+							p_code,
+							option
+			) VALUES (
+							#{code},
+							#{o}
+			)
+	</insert>
+	
+	<select id="getProductList" resultType="Product">
+		SELECT   	code,
+					name,
+					descr,
+					isSale,
+					detail_desc,
+					material,
+					size,
+					manufacturer,
+					caution,
+					price,
+					point_t AS point,
+					stock,
+					ship AS shipping,
+					files AS filesname,
+					type AS type_s,
+					category,
+					mainPhoto,
+					rating
+		FROM product
+	</select>
+	
+	<delete id="deleteProduct" parameterType="Integer">
+		DELETE FROM product WHERE code = #{code}
+	</delete>
+	
+	<select id="getProductDetails" parameterType="Integer" resultType="Product">
+		SELECT   	code,
+					name,
+					descr,
+					isSale,
+					detail_desc,
+					material,
+					size,
+					manufacturer,
+					caution,
+					price,
+					point_t AS point,
+					stock,
+					ship AS shipping,
+					files AS filesname,
+					type AS type_s,
+					category,
+					mainPhoto, 
+					mainCategory,
+					rating
+		FROM product
+		WHERE CODE = #{code}
+	</select>
+	
+	<select id="getOptions" parameterType="Integer" resultType="Option">
+		SELECT   	num,
+				p_code,
+				option
+		FROM p_options
+		WHERE p_code = #{code}
+	</select>
+	
+	<update id="editProduct" parameterType="Product">
+		UPDATE 				product
+  	 	SET 				
+							category = #{category},
+							name = #{name},
+							descr = #{descr},
+							type = #{type_s},
+							isSale = #{isSale},
+							detail_desc = #{detail_desc},
+							material = #{material},
+							size = #{size},
+							manufacturer = #{manufacturer},
+							caution = #{caution},
+							price = #{price},
+							point_t = #{point},
+							stock = #{stock},
+							ship = #{shipping},
+							mainCategory = #{mainCategory}
+		WHERE 
+				 CODE = #{code}
+	</update>
+	<update id="editOptions" parameterType="map">
+		UPDATE 				p_options
+  	 	SET 				
+							option = #{o}
+		WHERE 
+				 num = #{num}
+	</update>
+	
+	<select id="getproductlist_shop" parameterType="Integer" resultType="Product">
+		SELECT * FROM product WHERE  mainCategory = #{code}
+	</select>
+	
+	<update id="updateRating" parameterType="Product">
+		UPDATE 				product
+  	 	SET 				
+							rating = #{rating}
+		WHERE 
+				 code = #{code}
+	</update>
+	
+	<select id="getRankingList" resultType="Product">
+		SELECT 		
+					count,
+					code,
+					name,
+					descr,
+					isSale,
+					detail_desc,
+					material,
+					size,
+					manufacturer,
+					caution,
+					price,
+					point_t AS point,
+					stock,
+					ship AS shipping,
+					files AS filesname,
+					type AS type_s,
+					category,
+					mainPhoto,
+					rating 
+		FROM (SELECT COUNT(*) AS count,p_code FROM order_details ta GROUP BY p_code) ta
+		INNER JOIN product ON ta.p_code = product.code
+		ORDER BY ta.count DESC
+	</select>
+
+</mapper>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcomputerstudy.example.mapper.UserMapper">
+
+	<select id="readUser" parameterType="String" resultType="User">
+		SELECT		u_id AS username,
+				PASSWORD,
+				NAME,
+				DATETIME,
+				isAccountNonExpired,
+				isAccountNonLocked,
+				isCredentialsNonExpired,
+				isEnabled,
+				oauth	
+		from		user
+		where		1=1
+		and			u_id = #{username}
+	</select>
+	
+	<select id="readAuthorities" parameterType="String" resultType="org.springframework.security.core.authority.SimpleGrantedAuthority">
+		select			u_auth
+		from			u_auth
+		where			1=1
+		and				u_id = #{username}
+	</select>
+	
+	<insert id="createUser" parameterType="User">
+		insert into user (
+						u_id,
+						password,
+						name,
+						isAccountNonExpired,
+						isAccountNonLocked,
+						isCredentialsNonExpired,
+						isEnabled,
+						oauth,
+						auth,
+						phone,
+						address
+				) values (
+						#{username},
+						#{password},
+						#{name},
+						#{isAccountNonExpired},
+						#{isAccountNonLocked},
+						#{isCredentialsNonExpired},
+						#{isEnabled},
+						#{oauth},
+						#{auth},
+						#{phone},
+						#{address}
+				)
+	</insert>
+	
+	<insert id="createAuthority" parameterType="org.springframework.security.core.GrantedAuthority">
+		insert into u_auth (
+						u_id,
+						u_auth
+				) values 
+				<foreach collection="authorities" item="authority" index="index" separator=",">
+						( #{username}, #{authority.role} )
+				</foreach>
+				ON DUPLICATE KEY
+					UPDATE u_id = #{username}
+	</insert>
+	
+	<select id="readUser_refresh" parameterType="String" resultType="UserInfo">
+		SELECT			ta.u_id username,
+						ta.name,
+						ta.oauth,
+						tb.u_auth authList,
+						DATETIME,
+						address,
+						phone,
+						POINT,
+						auth,
+						isAccountNonLocked as reject
+		FROM			user ta
+		LEFT JOIN (
+					SELECT		ta.u_id,
+								GROUP_CONCAT(ta.u_auth SEPARATOR ",") u_auth
+					FROM		u_auth ta
+					GROUP BY	ta.u_id
+					) tb ON ta.u_id = tb.u_id
+		WHERE		ta.u_id = #{username}
+	</select>
+	
+	<delete id="deleteUser" parameterType="String">
+		DELETE FROM user WHERE u_id = #{username}
+	</delete>
+
+	<delete id="deleteAuthority" parameterType="String">
+		DELETE FROM u_auth WHERE u_id = #{username}
+	</delete>
+	
+	<delete id="deleteRoleAdmin" parameterType="String">
+		DELETE 
+ 		FROM 		u_auth 
+ 		WHERE 		u_auth = 'ROLE_ADMIN' &amp;&amp; u_id = #{username}
+	</delete>
+	
+	<select id="getUserList" resultType="UserInfo">
+		SELECT u_id as username,
+					name,
+					datetime,
+					oauth,
+					address,
+					phone,
+					point,
+					auth,
+					isAccountNonLocked as reject
+		from user
+	</select>
+	<update id="updateAuth" parameterType="User">
+		UPDATE 				user
+  	 	SET 				auth = #{auth}	
+		WHERE 			u_id = #{username}
+	</update>
+	
+	<update id="givePoint" parameterType="map">
+		UPDATE 				user
+  	 	SET 				point = point + #{point}
+		WHERE 				u_id = #{id}
+	</update>
+	
+	<select id="getTotal_point" resultType="Integer">
+		SELECT point
+		FROM user
+		WHERE u_id = #{id}
+	</select>
+	
+	<update id="updateBlockUser" parameterType="String">
+		UPDATE 				user
+  	 	SET 				isAccountNonLocked = false
+		WHERE 				u_id = #{username}
+	</update>
+	
+	<update id="updateUnblockUser" parameterType="String">
+		UPDATE 				user
+  	 	SET 				isAccountNonLocked = true
+		WHERE 				u_id = #{username}
+	</update>
+	
+	<update id="updateUserInfo" parameterType="UserInfo">
+		UPDATE 				user
+  	 	SET 				name = #{name},
+  	 						postcode = #{postcode},
+  	 						address = #{address},
+  	 						phone = #{phone} 
+		WHERE 				u_id = #{username}
+	</update>
+	
+	<insert id="insertWishItems" parameterType="OrderRequest">
+		INSERT INTO wishlist (wishitem, id, option, count) 
+		VALUES (#{code}, #{id}, #{option}, #{count})
+	</insert>
+	
+	<select id="getWishItems" parameterType="String" resultType="OrderRequest">
+		SELECT wishitem AS code, id, option, count, num
+		FROM wishlist
+		WHERE id = #{username}
+	</select>
+	
+	<delete id="delete_WishItem" parameterType="Integer">
+		DELETE FROM wishlist WHERE num = #{code}
+	</delete>
+	
+	<update id="updatePoint" parameterType="map">
+		UPDATE 				user
+  	 	SET 				point = point-#{point}
+		WHERE 				u_id = #{id}
+	</update>
+</mapper>

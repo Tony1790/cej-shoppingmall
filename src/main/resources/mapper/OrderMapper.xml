@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcomputerstudy.example.mapper.OrderMapper">
+
+	<insert id="insertOrderDetails" parameterType="OrderRequest">
+		INSERT INTO order_details (
+									p_code,
+									order_num,
+									COUNT,
+									option)
+				VALUES ( 	#{code},
+							#{order_num},
+							#{count},
+							#{option} )
+	</insert>
+
+	<insert id="insertOrderInfo" parameterType="OrderInfo">
+		INSERT INTO orderinfo (
+									state,
+									payway,
+									point,
+									total,
+									user
+									)
+				VALUES ( 	#{state},
+							#{payway},
+							#{point},
+							#{total},
+							#{user} 
+						)
+	</insert>
+	
+	<update id="insertReceiverInfo" parameterType="ReceiverInfo">
+		UPDATE orderinfo
+		SET		receiver_address = 	#{address},
+					receiver_postcode = #{receiver_postcode},
+					receiver_name = #{receiver_name},
+					receiver_phone = #{receiver_phone},
+					receiver_same = #{same} 
+		WHERE orderCode = LAST_INSERT_ID()
+	</update>
+	
+	<update id="insertUserInfo_order" parameterType="UserInfo">
+		UPDATE orderinfo
+		SET		user_address = 	#{address},
+					user_phone = #{phone},
+					user_name = #{name},
+					user_postcode = #{postcode}
+		WHERE orderCode = LAST_INSERT_ID()
+	</update>
+	
+	<select id="getOrderCode" resultType="Integer">
+		SELECT orderCode FROM orderinfo ORDER BY DATETIME DESC LIMIT 1
+	</select>
+	
+	<select id="getOrderInfo" parameterType="String" resultType="OrderInfo" >
+		SELECT * FROM orderinfo WHERE user = #{id}
+	</select>
+	
+	<select id="getOrderDetails" parameterType="Integer" resultType="OrderRequest" >
+		SELECT p_code AS code, order_num, count, option FROM order_details WHERE order_num = #{orderCode}
+	</select>
+	
+	<select id="getReceiverInfo" parameterType="Integer" resultType="ReceiverInfo" >
+		SELECT 						receiver_address AS address,
+									receiver_postcode,
+									receiver_name,
+									receiver_phone,
+									receiver_same AS same									
+		
+		FROM orderinfo 
+		WHERE orderCode = #{orderCode}
+	</select>
+	
+	<select id="getUserInfo" parameterType="Integer" resultType="UserInfo" >
+		SELECT 						user AS username,
+									user_name AS name,
+									user_phone AS phone,
+									user_address AS address,
+									user_postcode AS postcode								
+
+		FROM orderinfo 
+		WHERE orderCode = #{orderCode}
+	</select>
+	
+	<select id="getOrderInfo_All" resultType="OrderInfo">
+		SELECT * FROM orderinfo
+	</select>
+	
+	<delete id="deleteFailOrderInfo" parameterType="String">
+		DELETE FROM orderinfo WHERE user=#{id} ORDER BY DATETIME DESC LIMIT 1 
+	</delete>
+	
+	<select id="getOrderinfoById" parameterType="String" resultType="OrderInfo">
+		SELECT * FROM orderinfo WHERE user=#{id} ORDER BY DATETIME DESC LIMIT 1 
+	</select>
+	
+	<update id="insertGivePoint" parameterType="OrderInfo">
+		UPDATE orderinfo
+		SET		givePoint = #{givePoint}
+		WHERE orderCode = #{orderCode}
+	</update>
+	
+	<select id="getTotalSales" parameterType="String" resultType="Integer">
+		SELECT total FROM orderinfo WHERE DATETIME LIKE #{param}
+	</select>
+	
+</mapper>

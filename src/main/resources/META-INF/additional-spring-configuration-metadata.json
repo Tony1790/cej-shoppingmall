@@ -1,0 +1,72 @@
+{"properties": [
+  {
+    "name": "spring.devtools.livereload.enabled",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.devtools.livereload.enabled'"
+  },
+  {
+    "name": "spring.devtools.restart.log-condition-evaluation-dalta",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.devtools.restart.log-condition-evaluation-dalta'"
+  },
+  {
+    "name": "server.tomcat.file-encoding",
+    "type": "java.lang.String",
+    "description": "A description for 'server.tomcat.file-encoding'"
+  },
+  {
+    "name": "security.oauth2.client.registration.kakao.authorization-grant-type",
+    "type": "java.lang.String",
+    "description": "A description for 'security.oauth2.client.registration.kakao.authorization-grant-type'"
+  },
+  {
+    "name": "security.oauth2.client.registration.kakao.client-id",
+    "type": "java.lang.String",
+    "description": "A description for 'security.oauth2.client.registration.kakao.client-id'"
+  },
+  {
+    "name": "security.oauth2.client.registration.kakao.redirect-uri",
+    "type": "java.lang.String",
+    "description": "A description for 'security.oauth2.client.registration.kakao.redirect-uri'"
+  },
+  {
+    "name": "security.oauth2.client.registration.kakao.scope",
+    "type": "java.lang.String",
+    "description": "A description for 'security.oauth2.client.registration.kakao.scope'"
+  },
+  {
+    "name": "security.oauth2.client.registration.kakao.client-authentication-method",
+    "type": "java.lang.String",
+    "description": "A description for 'security.oauth2.client.registration.kakao.client-authentication-method'"
+  },
+  {
+    "name": "security.oauth2.client.registration.kakao.client-name",
+    "type": "java.lang.String",
+    "description": "A description for 'security.oauth2.client.registration.kakao.client-name'"
+  },
+  {
+    "name": "security.oauth2.client.provider.kakao.authorization-uri",
+    "type": "java.lang.String",
+    "description": "A description for 'security.oauth2.client.provider.kakao.authorization-uri'"
+  },
+  {
+    "name": "security.oauth2.client.provider.kakao.token-uri",
+    "type": "java.lang.String",
+    "description": "A description for 'security.oauth2.client.provider.kakao.token-uri'"
+  },
+  {
+    "name": "security.oauth2.client.provider.kakao.user-info-uri",
+    "type": "java.lang.String",
+    "description": "A description for 'security.oauth2.client.provider.kakao.user-info-uri'"
+  },
+  {
+    "name": "security.oauth2.client.provider.kakao.user-name-attribute",
+    "type": "java.lang.String",
+    "description": "A description for 'security.oauth2.client.provider.kakao.user-name-attribute'"
+  },
+  {
+    "name": "shoppingmall.key",
+    "type": "java.lang.String",
+    "description": "A description for 'shoppingmall.key'"
+  }
+]}

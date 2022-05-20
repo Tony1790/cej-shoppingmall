@@ -1,0 +1,46 @@
+spring:
+  profiles:
+    active:
+    - local
+    
+---
+ 
+spring:  profiles:    active:    - local
+
+  session:    store-type: jdbc
+    jdbc:      initialize-schema: always
+    
+  datasource:    url:  jdbc:mysql://127.0.0.1:3306/project?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+  devtools:
+    livereload:
+      enabled: true
+    restart: 
+      log-condition-evaluation-dalta: false
+      
+  servlet:    multipart:      max-file-size: 1000MB
+      max-request-size: 1000MB
+      enabled: true
+      
+server:  port: 9010
+  tomcat:
+    file-encoding: UTF-8
+    
+  servlet:    encoding:      charset: UTF-8
+      enabled: true
+      force: true
+      
+    session:      timeout: 7200
+      
+  error:    whitelabel:      enabled: false
+      
+logging:  config: classpath:logback-spring.xml
+  
+mybatis:  type-aliases-package: com.lcomputerstudy.example.domain
+  mapper-locations: mapper/**/*.xml
+  
+shoppingmall:
+  key: kakaokey123

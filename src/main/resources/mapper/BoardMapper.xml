@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcomputerstudy.example.mapper.BoardMapper">
+
+	<insert id="insertQAPost1" parameterType="QABoard">
+		INSERT INTO qaboard (
+									title,
+									type,
+									content,
+									writer
+									)
+				VALUES ( 	#{title},
+							#{type},
+							#{content},
+							#{writer} )
+	</insert>
+	
+	<update id="insertQAPost2" parameterType="QABoard">
+  	 	UPDATE 			qaboard
+   		SET
+      				 groups = LAST_INSERT_ID(),
+      				 orders = '1'
+
+   		WHERE		 num = last_insert_id()
+	</update>
+	
+	<select id="getQABoardList" resultType="QABoard">
+		select  (concat(repeat('-', depth), title))as con, 
+						ta.*
+		FROM 				
+						qaboard ta
+				
+		ORDER BY 
+						groups desc, orders asc
+	</select>
+	
+	<select id="getQAPostDetails" parameterType="Integer" resultType="QABoard">
+		SELECT		*
+		FROM			qaboard
+		WHERE		num = #{num}
+	</select>
+	
+	<insert id="insertAnswerPost1" parameterType="QABoard">  
+        INSERT INTO qaboard (
+        		title,
+				type,
+				content,
+				writer,
+        		groups,
+        		orders,
+        		depth
+      ) VALUES (
+         #{title},
+         #{type},
+         #{content},
+         #{writer},
+         #{groups},
+         #{orders}+1,
+         #{depth}+1
+         )
+	</insert>
+	
+	<update id="insertAnswerPost2" parameterType="QABoard">
+  	 	UPDATE 				qaboard 
+  	 	SET 				orders = orders+1 
+		WHERE 
+				 (not num =  LAST_INSERT_ID() )
+					&amp;&amp; (not orders &lt; #{orders}+1) 
+					&amp;&amp; (groups = #{groups})
+	</update>
+	
+	<update id="addHit" parameterType="Integer">
+  	 	UPDATE 				qaboard 
+  	 	SET 				hit = hit+1
+		WHERE 				num = #{num}
+	</update>
+	
+	<delete id="deletePost" parameterType="Integer">
+		DELETE FROM qaboard WHERE num = #{num}
+	</delete>
+	
+	<insert id="insertReview" parameterType="Review">  
+        INSERT INTO review (
+        		title,
+				content,
+				writer,
+				order_num,
+				p_code,
+				p_option,
+				rating
+      ) VALUES (
+         #{title},
+         #{content},
+         #{writer},
+         #{order_num},
+         #{p_code},
+         #{p_option},
+         #{rating}
+         )
+	</insert>
+	
+	<select id="getReviews" parameterType="Integer" resultType="Review">
+		SELECT * FROM review WHERE p_code = #{code}  ORDER BY DATETIME desc
+	</select>
+	
+	<delete id="deleteReview" parameterType="Integer">
+		DELETE FROM review WHERE num = #{num}
+	</delete>
+	
+	<select id="getReviewList" resultType="Review">
+		SELECT * FROM review ORDER BY DATETIME desc
+	</select>
+	
+	<update id="editReview" parameterType="Review">
+  	 	UPDATE 				review 
+  	 	SET 				title = #{title},
+  	 						content = #{content},
+  	 						rating = #{rating}
+		WHERE 			num = #{num}
+	</update>
+	
+	<select id="getReviewCount" resultType="Integer" parameterType="Integer">
+		SELECT COUNT(*) FROM review WHERE p_code = #{p_code}
+	</select>
+	
+	<select id="getRatings" resultType="Integer" parameterType="Integer">
+		SELECT rating FROM review WHERE p_code = #{p_code}
+	</select>
+	
+	<select id="getUsersReview" resultType="Review" parameterType="String">
+		SELECT * FROM review WHERE writer = #{id}
+	</select>
+	
+</mapper>

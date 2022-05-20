@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcomputerstudy.example.mapper.CategoryMapper">
+
+	<select id="getCategories" resultType="Category">
+		SELECT * FROM category
+		ORDER BY  groups desc, orders asc
+
+	</select>
+	
+	<insert id="insertCategory" parameterType="Category">
+		INSERT INTO category (
+						code,
+						name,
+						stock,
+						isSale,
+						groups,
+						orders
+		) VALUES (
+						#{code},
+						#{name},
+						#{stock},
+						#{isSale},
+						#{code},
+						'1'
+						
+		)
+	</insert>
+	
+	<insert id="insertchildCategory" parameterType="Category">
+		INSERT INTO category (
+						code,
+						name,
+						stock,
+						isSale,
+						groups,
+						orders,
+						depth
+		) VALUES (
+						#{code},
+						(select CONCAT(t.name,'/',#{name})FROM (SELECT * FROM category WHERE orders = #{orders} &amp;&amp; groups = #{groups}) t),
+						#{stock},
+						#{isSale},
+						#{groups},
+						#{orders}+1,
+						#{depth}+1
+						
+		)
+	</insert>
+	<update id="insertchildCategory2" parameterType="Category">
+  	 	UPDATE 				category
+  	 	SET 				orders = orders+1 
+		WHERE 
+				 (not code =  #{code} )
+					&amp;&amp; (not orders &lt; #{orders}+1) 
+					&amp;&amp; (groups = #{groups})
+	</update>
+	
+	<update id="editCategory" parameterType="Category">
+  	 	UPDATE 				category
+  	 	SET 				name	=	#{name},
+  	 						stock	=	#{stock},
+  	 						isSale	=	#{isSale}			
+		WHERE 			CODE = #{code}
+	</update>
+	
+	<delete id="deleteCategory" parameterType="Integer">
+		DELETE FROM category WHERE code = #{code}
+	</delete>
+	
+	<select id="getMenu" resultType="Category">
+		SELECT * FROM category WHERE orders = '1'
+	</select>
+	
+	<select id="getCodes" parameterType="Integer" resultType="Integer">
+		SELECT code FROM category WHERE groups = #{code}
+	</select>
+
+</mapper>
