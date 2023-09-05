@@ -9,7 +9,7 @@ public class JwtResponse {
 	private String token;
 	private List<String> roles;
 	private String type = "Bearer";
-	private UserInfo user;
+	private UserInfo user;	
 	
 	public JwtResponse(String jwt, List<String>u_roles, UserInfo user) {
 		this.token = jwt;
