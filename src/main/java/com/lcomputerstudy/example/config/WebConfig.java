@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
 				.allowedOrigins("*")
 				.allowedMethods("*")
 				.exposedHeaders("jwt-token");
-		System.out.println("hello");
+		System.out.println("👍👍👌👌 Server is open now!🚀🚀🚀🚀");
 	}
 	
 

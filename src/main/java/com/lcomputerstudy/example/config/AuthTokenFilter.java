@@ -45,8 +45,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	/*OncePerRequestFilter에서 오버라이드된 메소드.
 	 * parseJwt메소드 호출해서 유효성 검사한 후 토큰에서 username 추출.
 	 * 추출된 username으로 loadUserByUsername메소드 사용해 User객체를 생성한다.
-	 * 
 	*/
+	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
