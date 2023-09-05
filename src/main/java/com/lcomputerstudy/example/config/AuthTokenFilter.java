@@ -32,6 +32,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	@Autowired
 	private UserService userService;
 	
+	//HTTP 리퀘스트에서 헤더 추출 후 헤더가 Bearer일 경우 jwt 반환
 	private String parseJwt(HttpServletRequest request) {
 		String headerAuth = request.getHeader("Authorization");
 		
@@ -41,6 +42,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		return null;
 	}
 	
+	//
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
