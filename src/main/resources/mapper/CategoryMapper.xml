@@ -40,7 +40,7 @@
 						depth
 		) VALUES (
 						#{code},
-						(select CONCAT(t.name,'/',#{name})FROM (SELECT * FROM category WHERE orders = #{orders} &amp;&amp; groups = #{groups}) t),
+						(select CONCAT(t.name,'/',#{name})FROM (SELECT * FROM category WHERE orders = #{orders} AND groups = #{groups}) t),
 						#{stock},
 						#{isSale},
 						#{groups},
